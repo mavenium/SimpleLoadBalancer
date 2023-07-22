@@ -31,6 +31,8 @@ class LoadBalancerHandler(server.SimpleHTTPRequestHandler):
             connection.request("GET", self.path)
             response = connection.getresponse()
 
+            print(f"Response From {current_server['host']}:{current_server['port']} Status {response.status}")
+
             # Return the response from the backend server to the client
             self.send_response(response.status)
             self.send_header("Content-type", response.headers.get("Content-type"))
