@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  server_one:
+    image: server
+    environment:
+      - APP=first
+    ports:
+      - "8081:5000"
+  server_two:
+    image: server
+    environment:
+      - APP=second
+    ports:
+      - "8082:5000"
+  server_tree:
+    image: server
+    environment:
+      - APP=third
+    ports:
+      - "8083:5000"
+  server_four:
+    image: server
+    environment:
+      - APP=fourth
+    ports:
+      - "8084:5000"
