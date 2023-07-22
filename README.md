@@ -4,6 +4,8 @@
 
 ##### How to execute the backend servers?
 - Go to the project directory `cd SimpleLoadBalancer/backend_servers`
+- Create the network:
+- `docker network create load_balancer_network`
 - Build the image:
 - `docker build -t server .`
 - Run `docker-compose -f docker-compose.yml up -d` command
