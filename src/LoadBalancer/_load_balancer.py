@@ -58,4 +58,5 @@ class LoadBalancerHandler(server.SimpleHTTPRequestHandler):
         except Exception as e:
             # Handle any exceptions and move to the next server
             self.move_to_next_backend_server()
+            logger.error(f"Error 500! {str(e)}")
             self.send_error(500, str(e))
