@@ -16,11 +16,13 @@ logger.setLevel(logging.DEBUG)
 class LoadBalancerHandler(server.SimpleHTTPRequestHandler):
     backend_servers = []
     current_server_id = 0
+    connection_timeout = 1
 
     def __setattr__(self, key, value) -> None:
         """It will use for changing the value of class attrs"""
         backend_servers = value if key == 'backend_servers' else []
         current_server_id = value if key == 'current_server_id' else 0
+        connection_timeout = value if key == 'connection_timeout' else 1
         super(LoadBalancerHandler, self).__setattr__(key, value)
 
     @classmethod
@@ -33,6 +35,7 @@ class LoadBalancerHandler(server.SimpleHTTPRequestHandler):
         """This value specifies the 'current_server_id'"""
         # (Round-Robin) algorithm
         cls.current_server_id = (cls.current_server_id + 1) % len(cls.backend_servers)
+        logger.info(f"Current server id is : {cls.current_server_id}")
 
     def do_GET(self):
         try:
@@ -40,7 +43,11 @@ class LoadBalancerHandler(server.SimpleHTTPRequestHandler):
             current_server = self.get_backend_server()
 
             # Send a request to the backend server
-            connection = client.HTTPConnection(current_server["host"], current_server["port"], timeout=1)
+            connection = client.HTTPConnection(
+                host=current_server["host"],
+                port=current_server["port"],
+                timeout=float(self.connection_timeout)
+            )
             connection.request("GET", self.path)
             response = connection.getresponse()
 
