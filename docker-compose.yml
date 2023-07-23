@@ -1,0 +1,88 @@
+version: '3'
+
+services:
+  server_one:
+    image: server
+    container_name: server_one
+    deploy:
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: 100M
+    environment:
+      - APP=first
+    ports:
+      - "8081:5000"
+    networks:
+      - load_balancer_network
+
+  server_two:
+    image: server
+    container_name: server_two
+    deploy:
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: 100M
+    environment:
+      - APP=second
+    ports:
+      - "8082:5000"
+    networks:
+      - load_balancer_network
+
+  server_tree:
+    image: server
+    container_name: server_tree
+    deploy:
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: 100M
+    environment:
+      - APP=third
+    ports:
+      - "8083:5000"
+    networks:
+      - load_balancer_network
+
+  server_four:
+    image: server
+    container_name: server_four
+    deploy:
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: 100M
+    environment:
+      - APP=fourth
+    ports:
+      - "8084:5000"
+    networks:
+      - load_balancer_network
+
+  load_balancer:
+    image: load_balancer
+    container_name: load_balancer
+    ports:
+      - "8080:8080"
+    environment:
+      - BACKEND_SERVER_ONE=server_one
+      - BACKEND_SERVER_ONE_PORT=5000
+      - BACKEND_SERVER_TWO=server_one
+      - BACKEND_SERVER_TWO_PORT=5000
+      - BACKEND_SERVER_TREE=server_one
+      - BACKEND_SERVER_TREE_PORT=5000
+      - BACKEND_SERVER_FOUR=server_one
+      - BACKEND_SERVER_FOUR_PORT=5000
+    depends_on:
+      - server_one
+      - server_two
+      - server_tree
+      - server_four
+    networks:
+      - load_balancer_network
+
+networks:
+  load_balancer_network:
+    external: true
