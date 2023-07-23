@@ -69,12 +69,13 @@ services:
     environment:
       - BACKEND_SERVER_ONE=server_one
       - BACKEND_SERVER_ONE_PORT=5000
-      - BACKEND_SERVER_TWO=server_one
+      - BACKEND_SERVER_TWO=server_two
       - BACKEND_SERVER_TWO_PORT=5000
-      - BACKEND_SERVER_TREE=server_one
+      - BACKEND_SERVER_TREE=server_tree
       - BACKEND_SERVER_TREE_PORT=5000
-      - BACKEND_SERVER_FOUR=server_one
+      - BACKEND_SERVER_FOUR=server_four
       - BACKEND_SERVER_FOUR_PORT=5000
+      - CONNECTION_TIMEOUT=0.8
     depends_on:
       - server_one
       - server_two
