@@ -1,5 +1,17 @@
 from http import server, client
 
+import logging
+
+logging.basicConfig(
+    filename='logging.log',
+    level=logging.DEBUG,
+    format='%(asctime)s:%(levelname)s:%(name)s:%(message)s',
+    filemode='w'
+)
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
 
 class LoadBalancerHandler(server.SimpleHTTPRequestHandler):
     backend_servers = []
@@ -18,7 +30,8 @@ class LoadBalancerHandler(server.SimpleHTTPRequestHandler):
 
     @classmethod
     def move_to_next_backend_server(cls):
-        """It sets the 'current_server_id' value based on (Round-Robin) algorithm"""
+        """This value specifies the 'current_server_id'"""
+        # (Round-Robin) algorithm
         cls.current_server_id = (cls.current_server_id + 1) % len(cls.backend_servers)
 
     def do_GET(self):
@@ -27,11 +40,12 @@ class LoadBalancerHandler(server.SimpleHTTPRequestHandler):
             current_server = self.get_backend_server()
 
             # Send a request to the backend server
-            connection = client.HTTPConnection(current_server["host"], current_server["port"])
+            connection = client.HTTPConnection(current_server["host"], current_server["port"], timeout=1)
             connection.request("GET", self.path)
             response = connection.getresponse()
 
             print(f"Response From {current_server['host']}:{current_server['port']} Status {response.status}")
+            logger.info(f"Response From {current_server['host']}:{current_server['port']} Status {response.status}")
 
             # Return the response from the backend server to the client
             self.send_response(response.status)
