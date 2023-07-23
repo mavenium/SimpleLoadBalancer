@@ -35,6 +35,7 @@ def start_load_balancer():
     handler = LoadBalancerHandler
     handler.backend_servers = backend_servers
     handler.current_server_id = 0
+    handler.connection_timeout = environ["CONNECTION_TIMEOUT"]
 
     server = http.server.HTTPServer((load_balancer_host, load_balancer_port), handler)
 
