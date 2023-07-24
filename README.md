@@ -6,15 +6,12 @@
 - Create the network:
 - `docker network create load_balancer_network`
 
-##### How to build the backend servers image?
-- Go to the `backend_servers` directory `cd SimpleLoadBalancer/backend_servers`
-- Build the image:
-- `docker build -t server .`
-
-##### How to build the load balancer image?
+##### How to build the images?
 - Go to the project directory `cd SimpleLoadBalancer`
-- Build the image:
-- `docker build -t load_balancer .`
+- Build the server image:
+- `docker build -t server -f dockerfiles/backend_servers/Dockerfile ./backend_servers`
+- Build the load_balancer image:
+- `docker build -t load_balancer -f dockerfiles/Dockerfile .`
 
 ##### How to run?
 - Go to the project directory `cd SimpleLoadBalancer`
@@ -41,3 +38,7 @@ docker run -itd --name load_tester --cpus 2 --memory 2g --network load_balancer_
 - Next, install the `loadtest` package on this container `npm install -g loadtest`
 - After that, update and install some packages `apt-get update && apt-get install -y curl nano`
 - Now you can send a lot of request to the load balancer system `loadtest -c 1 --rps 1 http://load_balancer:8080`
+
+### How to test the project?
+- Install the requirement packages `pip install --upgrade -r requirements_dev.txt`
+- Run the test by `pytest` command
