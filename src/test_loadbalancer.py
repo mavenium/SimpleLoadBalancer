@@ -62,10 +62,18 @@ class LoadBalancerTest(unittest.TestCase):
 
 class IntegrationTests(unittest.TestCase):
     def setUp(self):
+        handler = LoadBalancerHandler
+        handler.backend_servers = [
+            {"host": "localhost", "port": 8081},
+            {"host": "localhost", "port": 8082},
+            {"host": "localhost", "port": 8083},
+            {"host": "localhost", "port": 8084}
+        ]
+
         # Start the load balancer server
         self.host = "localhost"
         self.port = 8090
-        self.server = HTTPServer((self.host, self.port), LoadBalancerHandler)
+        self.server = HTTPServer((self.host, self.port), handler)
         self.server_thread = Thread(target=self.server.serve_forever)
         self.server_thread.start()
 
