@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERD 1
 
 RUN mkdir /app
 WORKDIR /app
-COPY src/app.py /app/app.py
+COPY ./src/app.py /app/app.py
 
 ADD ./requirements.txt /app
 
